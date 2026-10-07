@@ -1,237 +1,853 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" class="scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ink & Paper | Librería & Papelería Moderna</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              bg: '#FDFBF7',
-              card: '#FFFFFF',
-              text: '#1C1917',
-              muted: '#78716C',
-              terracotta: '#C86D51',
-              sage: '#8A9A86',
-              border: '#E7E5E4'
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ink & Paper | Librería & Papelería Moderna</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Cormorant Garamond (Editorial Serif) & Plus Jakarta Sans (Clean Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ink: {
+                            bg: '#FAF9F6',         // Ultra-clean warm alabaster/ivory background
+                            surface: '#FFFFFF',    // Crisp white for panels
+                            dark: '#111111',       // Soft off-black / charcoal text
+                            muted: '#737373',      // Muted neutral gray
+                            subtle: '#A3A3A3',     // Very light gray for secondary details
+                            border: '#E5E5E5',     // Ultra-thin 1px border lines
+                            accent: '#1F2937',     // Deep charcoal accent
+                            softBg: '#F3F2EF'      // Soft cream-gray section fill
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+                        sans: ['Plus Jakarta Sans', '-apple-system', 'sans-serif'],
+                    },
+                    letterSpacing: {
+                        widest: '0.18em',
+                        mega: '0.25em'
+                    }
+                }
             }
-          },
-          fontFamily: {
-            serif: ['Playfair Display', 'serif'],
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-          }
         }
-      }
-    }
-  </script>
+    </script>
+
+    <style>
+        body {
+            background-color: #FAF9F6;
+            color: #111111;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Custom Scrollbar for sleek appearance */
+        ::-webkit-scrollbar {
+            width: 5px;
+            height: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF9F6;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4D4D4;
+            border-radius: 2px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #A3A3A3;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .transition-drawer {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .editorial-border {
+            border: 1px solid #E5E5E5;
+        }
+    </style>
 </head>
-<body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col justify-between selection:bg-ink-dark selection:text-white">
 
-  <!-- Header -->
-  <header class="sticky top-0 z-40 bg-brand-bg/90 backdrop-blur-md border-b border-brand-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-      <a href="#" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-brand-text">
-        Ink & Paper
-      </a>
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
-      <!-- Search Bar -->
-      <div class="relative flex-1 max-w-md hidden md:block">
-        <input type="text" id="searchInput" placeholder="Buscar libros, libretas, plumas..." class="w-full bg-white border border-brand-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-terracotta/50">
-        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-brand-muted"></i>
-      </div>
-
-      <!-- Actions -->
-      <div class="flex items-center space-x-4">
-        <button onclick="toggleCart()" class="relative p-2 text-brand-text hover:text-brand-terracotta transition-colors">
-          <i data-lucide="shopping-bag" class="w-6 h-6"></i>
-          <span id="cartCount" class="absolute -top-1 -right-1 bg-brand-terracotta text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="py-16 sm:py-24 bg-stone-100/60 border-b border-brand-border">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      <h1 class="font-serif text-4xl sm:text-6xl font-normal text-stone-900 tracking-tight leading-tight">
-        El placer de leer, escribir y crear.
-      </h1>
-      <p class="mt-4 text-lg text-brand-muted max-w-2xl mx-auto font-light">
-        Una cuidada selección de literatura contemporánea, instrumentos de escritura y artículos de papelería de diseño.
-      </p>
-    </div>
-  </section>
-
-  <!-- Catalog Section -->
-  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
-    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-      <div>
-        <h2 class="font-serif text-2xl font-semibold">Nuestra Colección</h2>
-        <p class="text-sm text-brand-muted">Explora nuestras novedades destacadas</p>
-      </div>
-      
-      <!-- Filter Tags -->
-      <div class="flex flex-wrap gap-2" id="filterContainer">
-        <button onclick="filterProducts('all')" class="filter-btn active bg-brand-text text-white px-4 py-1.5 rounded-full text-xs font-medium transition-all">Todos</button>
-        <button onclick="filterProducts('libros')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Libros</button>
-        <button onclick="filterProducts('papeleria')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Papelería</button>
-        <button onclick="filterProducts('escritura')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Escritura</button>
-      </div>
+    <!-- Top Announcement Bar -->
+    <div class="bg-ink-dark text-white text-[11px] py-2 px-4 text-center font-light tracking-widest uppercase">
+        <span>Envíos gratuitos en España peninsular en pedidos superiores a 45 €</span>
     </div>
 
-    <!-- Grid -->
-    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <!-- Cards rendered via JS -->
-    </div>
-  </main>
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-ink-bg/95 backdrop-blur-md border-b border-ink-border transition-all">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Brand Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <span class="font-serif text-2xl sm:text-3xl font-light tracking-tight text-ink-dark group-hover:opacity-75 transition-opacity">
+                        Ink & Paper
+                    </span>
+                    <span class="hidden sm:inline-block w-px h-5 bg-ink-border"></span>
+                    <span class="hidden sm:inline-block text-[10px] tracking-widest uppercase text-ink-muted font-medium">Madrid</span>
+                </a>
 
-  <!-- Footer -->
-  <footer class="bg-stone-900 text-stone-300 py-12 border-t border-stone-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div>
-        <h3 class="font-serif text-xl text-white font-semibold mb-3">Ink & Paper</h3>
-        <p class="text-sm text-stone-400">Librería y papelería conceptual en España. Espacio dedicado a la lectura serena y los artículos de escritorio de alta calidad.</p>
-      </div>
-      <div>
-        <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Ubicación & Horario</h4>
-        <p class="text-sm text-stone-400">Calle Mayor 24, Madrid</p>
-        <p class="text-sm text-stone-400 mt-1">Lunes a Sábado: 10:00 - 20:30</p>
-      </div>
-      <div>
-        <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Boletín</h4>
-        <form onsubmit="event.preventDefault(); showToast('¡Suscripción confirmada!');" class="flex gap-2">
-          <input type="email" placeholder="Tu correo electrónico" required class="bg-stone-800 border border-stone-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none flex-1">
-          <button type="submit" class="bg-brand-terracotta text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">Unirse</button>
-        </form>
-      </div>
-    </div>
-  </footer>
+                <!-- Desktop Navigation Items -->
+                <nav class="hidden md:flex items-center space-x-10 text-xs tracking-widest uppercase font-medium text-ink-dark">
+                    <a href="#inicio" class="hover:text-ink-muted transition-colors py-1">Inicio</a>
+                    <a href="#catalogo" class="hover:text-ink-muted transition-colors py-1">Libros</a>
+                    <a href="#papeleria" class="hover:text-ink-muted transition-colors py-1">Papelería Fine Art</a>
+                    <a href="#club" class="hover:text-ink-muted transition-colors py-1">Club & Talleres</a>
+                </nav>
 
-  <!-- Slide-over Cart -->
-  <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
-    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleCart()"></div>
-    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
-      <div class="w-screen max-w-md bg-white shadow-xl flex flex-col">
-        <div class="p-6 border-b border-brand-border flex items-center justify-between">
-          <h2 class="font-serif text-lg font-semibold">Tu Cesta</h2>
-          <button onclick="toggleCart()" class="p-1 text-brand-muted hover:text-brand-text"><i data-lucide="x"></i></button>
-        </div>
-        <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4">
-          <!-- Cart items via JS -->
-        </div>
-        <div class="p-6 border-t border-brand-border bg-stone-50">
-          <div class="flex justify-between font-semibold text-base mb-4">
-            <span>Total:</span>
-            <span id="cartTotal">0,00 €</span>
-          </div>
-          <button onclick="checkout()" class="w-full bg-brand-text text-white py-3 rounded-lg font-medium hover:bg-stone-800 transition-colors">Tramitar Pedido</button>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- Header Actions (Search & Cart) -->
+                <div class="flex items-center gap-4">
+                    <!-- Search Input with Autocomplete -->
+                    <div class="relative hidden sm:block w-48 lg:w-60">
+                        <div class="relative">
+                            <input type="text" id="search-input" placeholder="Buscar título, autor..." 
+                                class="w-full bg-white border border-ink-border rounded-none py-1.5 pl-8 pr-3 text-xs text-ink-dark focus:outline-none focus:border-ink-dark transition-colors font-light">
+                            <i data-lucide="search" class="w-3.5 h-3.5 text-ink-muted absolute left-2.5 top-2.5"></i>
+                        </div>
+                        <!-- Dropdown Search Results -->
+                        <div id="search-results" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-ink-border p-2 z-50 shadow-sm max-h-72 overflow-y-auto">
+                        </div>
+                    </div>
 
-  <script>
-    const products = [
-      { id: 1, name: 'Cuaderno Bullet Journal A5', category: 'papeleria', price: 18.90, desc: 'Papel de 120g resistente a la tinta, encuadernación plana.', img: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=600' },
-      { id: 2, name: 'La Filósofa y el Mar', category: 'libros', price: 22.50, desc: 'Edición especial en tapa dura con acabado mate.', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600' },
-      { id: 3, name: 'Pluma Estilográfica Brass', category: 'escritura', price: 45.00, desc: 'Cuerpo de latón macizo con plumín de acero inoxidable fino.', img: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&q=80&w=600' },
-      { id: 4, name: 'Set de Subrayadores Pastel', category: 'papeleria', price: 9.50, desc: 'Tinta base agua con tonos suavizados para lectura serena.', img: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&q=80&w=600' }
-    ];
+                    <!-- Cart Trigger Button -->
+                    <button id="open-cart-btn" class="relative p-2 text-ink-dark hover:opacity-70 transition-opacity flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4 stroke-[1.5]"></i>
+                        <span class="text-xs uppercase tracking-widest hidden sm:inline-block font-medium">Cesta</span>
+                        <span id="cart-badge" class="text-xs font-semibold text-ink-dark bg-ink-softBg px-1.5 py-0.5 rounded-none border border-ink-border">0</span>
+                    </button>
 
-    let cart = [];
-
-    function renderProducts(items) {
-      const grid = document.getElementById('productGrid');
-      grid.innerHTML = items.map(p => `
-        <div class="bg-white border border-brand-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
-          <div class="aspect-square bg-stone-100 overflow-hidden relative">
-            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-          </div>
-          <div class="p-4">
-            <span class="text-xs uppercase tracking-wider text-brand-muted font-medium">${p.category}</span>
-            <h3 class="font-serif font-semibold text-lg mt-1 text-stone-900">${p.name}</h3>
-            <p class="text-xs text-brand-muted mt-1 line-clamp-2">${p.desc}</p>
-            <div class="mt-4 flex items-center justify-between">
-              <span class="font-semibold text-stone-900">${p.price.toFixed(2).replace('.', ',')} €</span>
-              <button onclick="addToCart(${p.id})" class="bg-stone-100 hover:bg-brand-terracotta hover:text-white p-2 rounded-lg transition-colors">
-                <i data-lucide="plus" class="w-4 h-4"></i>
-              </button>
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-toggle" class="md:hidden p-2 text-ink-dark">
+                        <i data-lucide="menu" class="w-5 h-5 stroke-[1.5]"></i>
+                    </button>
+                </div>
             </div>
-          </div>
         </div>
-      `).join('');
-      lucide.createIcons();
-    }
 
-    function addToCart(id) {
-      const prod = products.find(p => p.id === id);
-      cart.push(prod);
-      updateCart();
-      showToast(`${prod.name} añadido a la cesta`);
-    }
+        <!-- Mobile Navigation Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-ink-border bg-ink-bg px-6 py-6 space-y-4">
+            <div class="relative mb-4">
+                <input type="text" id="mobile-search-input" placeholder="Buscar libros o artículos..." class="w-full bg-white border border-ink-border py-2 pl-8 pr-4 text-xs">
+                <i data-lucide="search" class="w-3.5 h-3.5 text-ink-muted absolute left-2.5 top-3"></i>
+            </div>
+            <a href="#inicio" class="block text-xs uppercase tracking-widest text-ink-dark hover:text-ink-muted">Inicio</a>
+            <a href="#catalogo" class="block text-xs uppercase tracking-widest text-ink-dark hover:text-ink-muted">Colección de Libros</a>
+            <a href="#papeleria" class="block text-xs uppercase tracking-widest text-ink-dark hover:text-ink-muted">Papelería & Escritura</a>
+            <a href="#club" class="block text-xs uppercase tracking-widest text-ink-dark hover:text-ink-muted">Club de Lectura</a>
+        </div>
+    </header>
 
-    function updateCart() {
-      document.getElementById('cartCount').innerText = cart.length;
-      const itemsContainer = document.getElementById('cartItems');
-      if (cart.length === 0) {
-        itemsContainer.innerHTML = '<p class="text-center text-brand-muted py-8">Tu cesta está vacía</p>';
-      } else {
-        itemsContainer.innerHTML = cart.map((item, idx) => `
-          <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+    <!-- Hero Section -->
+    <section id="inicio" class="relative py-20 md:py-32 border-b border-ink-border">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- Left Editorial Text Content -->
+                <div class="lg:col-span-7 space-y-8">
+                    <p class="text-xs uppercase tracking-widest text-ink-muted font-medium">
+                        Librería & Papelería Conceptual — Madrid
+                    </p>
+
+                    <h1 class="font-serif text-5xl sm:text-6xl lg:text-7xl font-light text-ink-dark leading-[1.08] tracking-tight">
+                        La belleza del papel, la pausa del pensamiento.
+                    </h1>
+
+                    <p class="text-sm sm:text-base text-ink-muted max-w-xl font-light leading-relaxed">
+                        Curaduría sobria de narrativa contemporánea, ensayo reflexivo y herramientas de escritura atemporales diseñadas para perdurar.
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-2">
+                        <a href="#catalogo" class="px-8 py-4 bg-ink-dark text-white text-xs uppercase tracking-widest font-medium hover:bg-opacity-90 transition-all text-center">
+                            Ver Catálogo
+                        </a>
+                        <a href="#papeleria" class="px-8 py-4 bg-white border border-ink-border text-ink-dark text-xs uppercase tracking-widest font-medium hover:border-ink-dark transition-all text-center">
+                            Útiles de Escritura
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Visual Image Frame -->
+                <div class="lg:col-span-5">
+                    <div class="relative bg-white p-3 border border-ink-border">
+                        <div class="aspect-[4/5] overflow-hidden bg-ink-softBg">
+                            <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=1000" 
+                                 alt="Librería minimalista Ink & Paper" 
+                                 class="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700">
+                        </div>
+                        <div class="mt-3 flex justify-between items-center text-[11px] text-ink-muted font-light px-1">
+                            <span>Colección Otoño / Invierno</span>
+                            <span>Ediciones Limitadas</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Minimalist Collections Selector -->
+    <section class="py-12 border-b border-ink-border bg-white">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+                <button onclick="filterByCategory('ficcion')" class="p-6 border border-ink-border hover:border-ink-dark transition-all text-center group">
+                    <span class="block font-serif text-2xl font-light text-ink-dark group-hover:italic">01</span>
+                    <span class="block text-xs uppercase tracking-widest font-medium text-ink-dark mt-2">Narrativa</span>
+                    <span class="block text-[11px] text-ink-muted mt-1 font-light">Novela y Relato</span>
+                </button>
+
+                <button onclick="filterByCategory('papeleria')" class="p-6 border border-ink-border hover:border-ink-dark transition-all text-center group">
+                    <span class="block font-serif text-2xl font-light text-ink-dark group-hover:italic">02</span>
+                    <span class="block text-xs uppercase tracking-widest font-medium text-ink-dark mt-2">Papelería</span>
+                    <span class="block text-[11px] text-ink-muted mt-1 font-light">Cuadernos Fine Art</span>
+                </button>
+
+                <button onclick="filterByCategory('desarrollo')" class="p-6 border border-ink-border hover:border-ink-dark transition-all text-center group">
+                    <span class="block font-serif text-2xl font-light text-ink-dark group-hover:italic">03</span>
+                    <span class="block text-xs uppercase tracking-widest font-medium text-ink-dark mt-2">Pensamiento</span>
+                    <span class="block text-[11px] text-ink-muted mt-1 font-light">Ensayo y Filosofía</span>
+                </button>
+
+                <button onclick="filterByCategory('escritura')" class="p-6 border border-ink-border hover:border-ink-dark transition-all text-center group">
+                    <span class="block font-serif text-2xl font-light text-ink-dark group-hover:italic">04</span>
+                    <span class="block text-xs uppercase tracking-widest font-medium text-ink-dark mt-2">Escritura</span>
+                    <span class="block text-[11px] text-ink-muted mt-1 font-light">Plumas y Tintas</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <section id="catalogo" class="py-20 max-w-7xl mx-auto px-6 sm:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6 border-b border-ink-border pb-6">
             <div>
-              <h4 class="font-serif text-sm font-semibold">${item.name}</h4>
-              <p class="text-xs text-brand-muted">${item.price.toFixed(2).replace('.', ',')} €</p>
+                <span class="text-xs uppercase tracking-widest text-ink-muted font-medium">Catálogo Seleccionado</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-light text-ink-dark mt-1">Nuestra Selección</h2>
             </div>
-            <button onclick="removeFromCart(${idx})" class="text-stone-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-          </div>
-        `).join('');
-      }
-      const total = cart.reduce((sum, item) => sum + item.price, 0);
-      document.getElementById('cartTotal').innerText = `${total.toFixed(2).replace('.', ',')} €`;
-      lucide.createIcons();
-    }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCart();
-    }
+            <!-- Filter Buttons -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 hide-scrollbar text-xs tracking-widest uppercase font-medium" id="filter-buttons-container">
+                <button onclick="setActiveFilter('todos')" id="filter-todos" class="filter-btn px-4 py-2 border border-ink-dark bg-ink-dark text-white transition-all whitespace-nowrap">Todos</button>
+                <button onclick="setActiveFilter('ficcion')" id="filter-ficcion" class="filter-btn px-4 py-2 border border-ink-border text-ink-dark hover:border-ink-dark transition-all whitespace-nowrap">Ficción</button>
+                <button onclick="setActiveFilter('desarrollo')" id="filter-desarrollo" class="filter-btn px-4 py-2 border border-ink-border text-ink-dark hover:border-ink-dark transition-all whitespace-nowrap">Ensayo</button>
+                <button onclick="setActiveFilter('infantil')" id="filter-infantil" class="filter-btn px-4 py-2 border border-ink-border text-ink-dark hover:border-ink-dark transition-all whitespace-nowrap">Infantil</button>
+            </div>
+        </div>
 
-    function toggleCart() {
-      document.getElementById('cartDrawer').classList.toggle('hidden');
-    }
+        <!-- Book Products Grid -->
+        <div id="books-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <!-- Dynamic Injection via JavaScript -->
+        </div>
+    </section>
 
-    function filterProducts(cat) {
-      const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
-      renderProducts(filtered);
-    }
+    <!-- Stationery Section -->
+    <section id="papeleria" class="py-20 bg-white border-y border-ink-border">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="max-w-2xl mb-12">
+                <span class="text-xs uppercase tracking-widest text-ink-muted font-medium">Herramientas de Escritura</span>
+                <h2 class="font-serif text-3xl sm:text-4xl font-light text-ink-dark mt-1">Papelería Fine Art</h2>
+                <p class="text-xs text-ink-muted mt-2 font-light leading-relaxed">
+                    Piezas elaboradas con papeles de grano fino, cubiertas en lino y plumines artesanales pensados para una experiencia táctil serena.
+                </p>
+            </div>
 
-    function showToast(msg) {
-      const toast = document.createElement('div');
-      toast.className = 'fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-2 rounded-lg text-sm shadow-lg z-50 transition-opacity';
-      toast.innerText = msg;
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 3000);
-    }
+            <div id="stationery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Dynamic Injection via JavaScript -->
+            </div>
+        </div>
+    </section>
 
-    function checkout() {
-      if (cart.length === 0) return;
-      alert('¡Gracias por tu pedido en Ink & Paper!');
-      cart = [];
-      updateCart();
-      toggleCart();
-    }
+    <!-- Book Club & Events Section -->
+    <section id="club" class="py-20 max-w-7xl mx-auto px-6 sm:px-8">
+        <div class="border border-ink-border bg-white p-8 md:p-14">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-xs uppercase tracking-widest text-ink-muted font-medium">Comunidad Ink & Paper</span>
+                    
+                    <h2 class="font-serif text-3xl sm:text-5xl font-light text-ink-dark leading-tight">
+                        Club de Lectura & Encuentros
+                    </h2>
 
-    // Init
-    renderProducts(products);
-    lucide.createIcons();
-  </script>
+                    <p class="text-xs sm:text-sm text-ink-muted font-light leading-relaxed">
+                        Nos reunimos mensualmente en nuestra librería de Madrid para conversar sobre narrativa contemporánea y pensamiento. Además, organizamos talleres de encuadernación artesanal.
+                    </p>
+
+                    <!-- Event Dates -->
+                    <div class="space-y-3 pt-4 border-t border-ink-border">
+                        <div class="flex items-center gap-4 py-2">
+                            <span class="font-serif text-xl font-light text-ink-dark w-12">29 OCT</span>
+                            <div class="border-l border-ink-border pl-4">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-ink-dark">Encuentro: La Ciudad y sus Sombras</h4>
+                                <p class="text-[11px] text-ink-muted">20:00 h • Presencial en Calle Mayor 24</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-4 py-2 border-t border-ink-border">
+                            <span class="font-serif text-xl font-light text-ink-dark w-12">05 NOV</span>
+                            <div class="border-l border-ink-border pl-4">
+                                <h4 class="text-xs font-semibold uppercase tracking-wider text-ink-dark">Taller: Caligrafía con Pluma Estilográfica</h4>
+                                <p class="text-[11px] text-ink-muted">18:00 h • Incluye kit de escritura</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Registration Form -->
+                <div class="lg:col-span-6 bg-ink-bg p-6 sm:p-8 border border-ink-border">
+                    <h3 class="font-serif text-2xl font-light text-ink-dark mb-1">Reserva de Plaza</h3>
+                    <p class="text-[11px] text-ink-muted mb-6 font-light">Aforo reducido a 12 participantes por actividad.</p>
+
+                    <form id="event-registration-form" onsubmit="handleEventRegister(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-ink-muted font-semibold mb-1">Nombre Completo</label>
+                            <input type="text" required placeholder="Ej. Elena Sola" class="w-full bg-white border border-ink-border px-3 py-2 text-xs text-ink-dark focus:outline-none focus:border-ink-dark font-light">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-ink-muted font-semibold mb-1">Correo Electrónico</label>
+                            <input type="email" required placeholder="elena@ejemplo.com" class="w-full bg-white border border-ink-border px-3 py-2 text-xs text-ink-dark focus:outline-none focus:border-ink-dark font-light">
+                        </div>
+
+                        <div>
+                            <label class="block text-[10px] uppercase tracking-widest text-ink-muted font-semibold mb-1">Actividad</label>
+                            <select required class="w-full bg-white border border-ink-border px-3 py-2 text-xs text-ink-dark focus:outline-none focus:border-ink-dark font-light">
+                                <option value="club-octubre">Club de Lectura: La Ciudad y sus Sombras (29 Oct)</option>
+                                <option value="taller-noviembre">Taller Caligrafía Tradicional (05 Nov)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="w-full py-3 bg-ink-dark text-white text-xs uppercase tracking-widest font-medium hover:bg-opacity-90 transition-all mt-2">
+                            Confirmar Reserva
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide-over Cart Drawer -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 pointer-events-none">
+        <!-- Backdrop -->
+        <div id="cart-backdrop" class="absolute inset-0 bg-ink-dark/30 backdrop-blur-xs opacity-0 transition-opacity duration-300 pointer-events-none" onclick="toggleCart(false)"></div>
+        
+        <!-- Drawer Panel -->
+        <div id="cart-panel" class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white border-l border-ink-border transition-drawer translate-x-full pointer-events-auto flex flex-col shadow-xl">
+            <!-- Header -->
+            <div class="p-6 border-b border-ink-border flex items-center justify-between">
+                <span class="font-serif text-xl font-light text-ink-dark">Tu Cesta</span>
+                <button onclick="toggleCart(false)" class="p-1 text-ink-muted hover:text-ink-dark">
+                    <i data-lucide="x" class="w-5 h-5 stroke-[1.5]"></i>
+                </button>
+            </div>
+
+            <!-- Cart Products List -->
+            <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-ink-border">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Footer Calculations -->
+            <div class="p-6 border-t border-ink-border bg-ink-bg space-y-4">
+                <div class="space-y-1.5 text-xs">
+                    <div class="flex justify-between text-ink-muted font-light">
+                        <span>Subtotal</span>
+                        <span id="cart-subtotal" class="text-ink-dark font-normal">0,00 €</span>
+                    </div>
+                    <div class="flex justify-between text-ink-muted font-light">
+                        <span>Envío</span>
+                        <span id="cart-shipping" class="text-ink-dark font-normal">Gratis</span>
+                    </div>
+                    <div class="border-t border-ink-border pt-3 flex justify-between font-serif text-lg text-ink-dark">
+                        <span>Total</span>
+                        <span id="cart-total" class="font-normal">0,00 €</span>
+                    </div>
+                </div>
+
+                <button onclick="processCheckout()" id="checkout-btn" class="w-full py-3.5 bg-ink-dark text-white text-xs uppercase tracking-widest font-medium hover:bg-opacity-90 transition-all">
+                    Tramitar Pedido
+                </button>
+
+                <p class="text-[10px] text-center text-ink-muted font-light uppercase tracking-wider">
+                    Garantía de envío protegido & devolución en 14 días
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick View Modal -->
+    <div id="quick-view-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="absolute inset-0 bg-ink-dark/40 backdrop-blur-xs" onclick="closeQuickView()"></div>
+        
+        <div class="relative bg-white max-w-2xl w-full p-6 sm:p-8 z-10 border border-ink-border transform scale-95 transition-transform duration-300" id="quick-view-content">
+            <button onclick="closeQuickView()" class="absolute right-4 top-4 p-2 text-ink-muted hover:text-ink-dark">
+                <i data-lucide="x" class="w-5 h-5 stroke-[1.5]"></i>
+            </button>
+            <div id="quick-view-body">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white text-ink-dark border-t border-ink-border pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-10 mb-12">
+                
+                <div class="md:col-span-5 space-y-4">
+                    <span class="font-serif text-2xl font-light tracking-tight">Ink & Paper</span>
+                    <p class="text-xs text-ink-muted font-light leading-relaxed max-w-sm">
+                        Librería independiente y papelería conceptual en Madrid. Un refugio dedicado al placer de leer sereno, el papel de gramaje noble y los útiles de escritorio.
+                    </p>
+                </div>
+
+                <div class="md:col-span-3 space-y-2 text-xs">
+                    <span class="block uppercase tracking-widest font-medium text-ink-dark mb-3">Visítanos</span>
+                    <p class="text-ink-muted font-light">Calle Mayor 24</p>
+                    <p class="text-ink-muted font-light">28013 Madrid, España</p>
+                    <p class="text-ink-muted font-light mt-2">Lunes a Sábado: 10:00 - 20:30 h</p>
+                </div>
+
+                <div class="md:col-span-4 space-y-3">
+                    <span class="block text-xs uppercase tracking-widest font-medium text-ink-dark">Boletín Literario</span>
+                    <p class="text-xs text-ink-muted font-light">Novedades editoriales y recomendaciones semanales.</p>
+                    
+                    <form id="newsletter-form" onsubmit="handleNewsletter(event)" class="flex gap-2 pt-1">
+                        <input type="email" required placeholder="Tu correo electrónico..." class="bg-ink-bg border border-ink-border px-3 py-2 text-xs text-ink-dark focus:outline-none focus:border-ink-dark flex-1 font-light">
+                        <button type="submit" class="px-4 py-2 bg-ink-dark text-white text-xs uppercase tracking-wider hover:bg-opacity-90 transition-all">
+                            Unirse
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-ink-border flex flex-col sm:flex-row items-center justify-between text-[11px] text-ink-muted font-light gap-4">
+                <p>&copy; 2026 Ink & Paper. Todos los derechos reservados.</p>
+                <div class="flex gap-6">
+                    <a href="#" class="hover:text-ink-dark transition-colors">Aviso Legal</a>
+                    <a href="#" class="hover:text-ink-dark transition-colors">Privacidad</a>
+                    <a href="#" class="hover:text-ink-dark transition-colors">Envíos</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Models
+        const products = [
+            // Books
+            {
+                id: 'b1',
+                type: 'book',
+                category: 'ficcion',
+                title: 'El Eco de las Estaciones',
+                author: 'Clara Santamaría',
+                price: 21.90,
+                image: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600',
+                description: 'Una novela introspectiva sobre la memoria, el tiempo y el sosiego en un valle de los Pirineos.'
+            },
+            {
+                id: 'b2',
+                type: 'book',
+                category: 'desarrollo',
+                title: 'Elogio de la Lentejuela',
+                author: 'Mateo R. Valdés',
+                price: 18.50,
+                image: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&q=80&w=600',
+                description: 'Reflexiones filosóficas en torno a la lentitud, la atención consciente y la vida cotidiana.'
+            },
+            {
+                id: 'b3',
+                type: 'book',
+                category: 'infantil',
+                title: 'El Bosque de las Letras',
+                author: 'Beatriz Molina',
+                price: 16.00,
+                image: 'https://images.unsplash.com/photo-1512586180325-1e35d214690d?auto=format&fit=crop&q=80&w=600',
+                description: 'Álbum ilustrado con acabados serigrafiados para incentivar la lectura en los más jóvenes.'
+            },
+            {
+                id: 'b4',
+                type: 'book',
+                category: 'ficcion',
+                title: 'Crónicas de Papel Viejo',
+                author: 'Adrián L. Vega',
+                price: 24.00,
+                image: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?auto=format&fit=crop&q=80&w=600',
+                description: 'Misterios entre pasillos olvidados de una biblioteca histórica de Europa Central.'
+            },
+            
+            // Fine Art Stationery
+            {
+                id: 's1',
+                type: 'stationery',
+                category: 'papeleria',
+                title: 'Cuaderno Encadenado Midori',
+                author: 'Papel 120g • 192 Pág',
+                price: 19.50,
+                image: 'https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&q=80&w=600',
+                description: 'Encuadernación plana artesanal con hilo de lino, idónea para escritura con pluma estilográfica.'
+            },
+            {
+                id: 's2',
+                type: 'stationery',
+                category: 'escritura',
+                title: 'Pluma Estilográfica Brass',
+                author: 'Latón Macizo • Plumín M',
+                price: 58.00,
+                image: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&q=80&w=600',
+                description: 'Cuerpo de latón macizo atemporal que desarrolla una pátina natural única con el uso diario.'
+            },
+            {
+                id: 's3',
+                type: 'stationery',
+                category: 'papeleria',
+                title: 'Set Puntos de Libro Botánicos',
+                author: 'Grabado Fino',
+                price: 12.90,
+                image: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&q=80&w=600',
+                description: 'Juego de 4 marcapáginas en latón pulido con motivos botánicos impresos en relieve.'
+            }
+        ];
+
+        // Shopping Cart State
+        let cart = [];
+
+        // Application Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderBooks('todos');
+            renderStationery();
+            setupSearchAutocomplete();
+            setupMobileMenu();
+            lucide.createIcons();
+        });
+
+        // Format currency helper (Spain Regional standard)
+        function formatEUR(amount) {
+            return amount.toFixed(2).replace('.', ',') + ' €';
+        }
+
+        function renderBooks(categoryFilter = 'todos') {
+            const container = document.getElementById('books-grid');
+            container.innerHTML = '';
+
+            const filteredBooks = products.filter(p => p.type === 'book' && (categoryFilter === 'todos' || p.category === categoryFilter));
+
+            filteredBooks.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'bg-white border border-ink-border p-4 flex flex-col justify-between group hover:border-ink-dark transition-colors';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative overflow-hidden bg-ink-bg aspect-[3/4] mb-4">
+                            <img src="${book.image}" alt="${book.title}" class="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500">
+                            <button onclick="openQuickView('${book.id}')" class="absolute inset-x-0 bottom-0 py-2 bg-ink-dark/90 text-white text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity text-center">
+                                Vista Rápida
+                            </button>
+                        </div>
+                        <span class="text-[10px] uppercase tracking-widest text-ink-muted block mb-1">${book.category}</span>
+                        <h3 class="font-serif font-normal text-lg text-ink-dark leading-snug line-clamp-1">${book.title}</h3>
+                        <p class="text-xs text-ink-muted mt-0.5 font-light">${book.author}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 mt-4 border-t border-ink-border">
+                        <span class="font-serif text-base font-normal text-ink-dark">${formatEUR(book.price)}</span>
+                        <button onclick="addToCart('${book.id}')" class="p-2 text-ink-dark hover:text-ink-muted transition-colors" title="Añadir a la cesta">
+                            <i data-lucide="plus" class="w-4 h-4 stroke-[1.5]"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function renderStationery() {
+            const container = document.getElementById('stationery-grid');
+            container.innerHTML = '';
+
+            const stationeryItems = products.filter(p => p.type === 'stationery');
+
+            stationeryItems.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'bg-ink-bg border border-ink-border p-5 flex flex-col justify-between group hover:border-ink-dark transition-colors';
+                card.innerHTML = `
+                    <div>
+                        <div class="bg-white border border-ink-border aspect-video mb-4 overflow-hidden">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                        </div>
+                        <span class="text-[10px] uppercase tracking-widest text-ink-muted block mb-1">${item.author}</span>
+                        <h3 class="font-serif font-normal text-xl text-ink-dark">${item.title}</h3>
+                        <p class="text-xs text-ink-muted mt-2 font-light leading-relaxed">${item.description}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-4 mt-6 border-t border-ink-border">
+                        <span class="font-serif text-lg font-normal text-ink-dark">${formatEUR(item.price)}</span>
+                        <button onclick="addToCart('${item.id}')" class="px-3 py-1.5 border border-ink-dark bg-ink-dark text-white text-[10px] uppercase tracking-widest font-medium hover:bg-opacity-90 transition-all">
+                            Añadir
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        function setActiveFilter(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-4 py-2 border border-ink-border text-ink-dark hover:border-ink-dark transition-all whitespace-nowrap';
+            });
+            const activeBtn = document.getElementById(`filter-${category}`);
+            if(activeBtn) {
+                activeBtn.className = 'filter-btn px-4 py-2 border border-ink-dark bg-ink-dark text-white transition-all whitespace-nowrap';
+            }
+            renderBooks(category);
+        }
+
+        function filterByCategory(category) {
+            const catalogoSection = document.getElementById('catalogo');
+            catalogoSection.scrollIntoView({ behavior: 'smooth' });
+            setActiveFilter(category);
+        }
+
+        function setupSearchAutocomplete() {
+            const searchInput = document.getElementById('search-input');
+            const searchResults = document.getElementById('search-results');
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                if(query.length < 2) {
+                    searchResults.classList.add('hidden');
+                    return;
+                }
+
+                const matches = products.filter(p => p.title.toLowerCase().includes(query) || p.author.toLowerCase().includes(query));
+                
+                if(matches.length === 0) {
+                    searchResults.innerHTML = `<div class="p-3 text-xs text-ink-muted text-center font-light">Sin resultados</div>`;
+                } else {
+                    searchResults.innerHTML = matches.map(m => `
+                        <div onclick="openQuickView('${m.id}')" class="p-2 hover:bg-ink-bg cursor-pointer flex items-center gap-3 border-b border-ink-border last:border-none">
+                            <img src="${m.image}" class="w-7 h-9 object-cover">
+                            <div>
+                                <p class="text-xs font-serif font-normal text-ink-dark leading-tight">${m.title}</p>
+                                <p class="text-[10px] text-ink-muted font-light">${m.author}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+                searchResults.classList.remove('hidden');
+            });
+
+            document.addEventListener('click', (e) => {
+                if(!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+                    searchResults.classList.add('hidden');
+                }
+            });
+        }
+
+        function toggleCart(open = true) {
+            const backdrop = document.getElementById('cart-backdrop');
+            const panel = document.getElementById('cart-panel');
+            
+            if(open) {
+                backdrop.classList.remove('pointer-events-none', 'opacity-0');
+                backdrop.classList.add('opacity-100');
+                panel.classList.remove('translate-x-full');
+            } else {
+                backdrop.classList.remove('opacity-100');
+                backdrop.classList.add('opacity-0', 'pointer-events-none');
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        document.getElementById('open-cart-btn').addEventListener('click', () => toggleCart(true));
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingIndex = cart.findIndex(item => item.id === productId);
+
+            if(existingIndex > -1) {
+                cart[existingIndex].quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            showToast(`Añadido a la cesta: ${product.title}`);
+        }
+
+        function updateQuantity(productId, change) {
+            const index = cart.findIndex(item => item.id === productId);
+            if(index > -1) {
+                cart[index].quantity += change;
+                if(cart[index].quantity <= 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            updateCartUI();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const badge = document.getElementById('cart-badge');
+            const container = document.getElementById('cart-items-container');
+            const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            badge.innerText = totalQty;
+
+            if(cart.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center py-16">
+                        <p class="font-serif text-lg text-ink-dark">Tu cesta está vacía</p>
+                        <p class="text-xs text-ink-muted mt-1 font-light">Explora el catálogo para seleccionar títulos o papel.</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = cart.map(item => `
+                    <div class="pt-4 flex items-center justify-between gap-3">
+                        <img src="${item.image}" alt="${item.title}" class="w-10 h-14 object-cover border border-ink-border shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-serif text-sm font-normal text-ink-dark truncate">${item.title}</h4>
+                            <p class="text-xs text-ink-muted font-light">${formatEUR(item.price)}</p>
+                            <div class="flex items-center gap-2 mt-2">
+                                <button onclick="updateQuantity('${item.id}', -1)" class="w-5 h-5 border border-ink-border flex items-center justify-center text-xs text-ink-dark hover:border-ink-dark">-</button>
+                                <span class="text-xs font-light">${item.quantity}</span>
+                                <button onclick="updateQuantity('${item.id}', 1)" class="w-5 h-5 border border-ink-border flex items-center justify-center text-xs text-ink-dark hover:border-ink-dark">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="font-serif text-sm font-normal text-ink-dark">${formatEUR(item.price * item.quantity)}</span>
+                            <button onclick="removeFromCart('${item.id}')" class="block text-ink-muted hover:text-ink-dark text-xs mt-2 ml-auto">
+                                <i data-lucide="trash-2" class="w-3.5 h-3.5 stroke-[1.5]"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('cart-subtotal').innerText = formatEUR(subtotal);
+            document.getElementById('cart-total').innerText = formatEUR(subtotal);
+            lucide.createIcons();
+        }
+
+        function processCheckout() {
+            if(cart.length === 0) {
+                showToast("Tu cesta está vacía", "error");
+                return;
+            }
+            showToast("Procesando pedido simulado... ¡Gracias por confiar en Ink & Paper!");
+            cart = [];
+            updateCartUI();
+            toggleCart(false);
+        }
+
+        function openQuickView(productId) {
+            const product = products.find(p => p.id === productId);
+            const modal = document.getElementById('quick-view-modal');
+            const content = document.getElementById('quick-view-content');
+            const body = document.getElementById('quick-view-body');
+
+            body.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div class="border border-ink-border p-2 bg-ink-bg">
+                        <img src="${product.image}" alt="${product.title}" class="w-full h-64 object-cover">
+                    </div>
+                    <div class="space-y-4">
+                        <span class="text-[10px] uppercase tracking-widest text-ink-muted">
+                            ${product.type === 'book' ? 'Libro' : 'Papelería Fine Art'}
+                        </span>
+                        <h3 class="font-serif text-3xl font-light text-ink-dark">${product.title}</h3>
+                        <p class="text-xs text-ink-muted font-light">${product.author}</p>
+                        <p class="text-xs text-ink-dark font-light leading-relaxed">${product.description}</p>
+                        <div class="font-serif text-2xl font-light text-ink-dark">${formatEUR(product.price)}</div>
+                        <button onclick="addToCart('${product.id}'); closeQuickView();" class="w-full py-3 bg-ink-dark text-white text-xs uppercase tracking-widest font-medium hover:bg-opacity-90 transition-all">
+                            Añadir a la Cesta
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+            lucide.createIcons();
+        }
+
+        function closeQuickView() {
+            const modal = document.getElementById('quick-view-modal');
+            const content = document.getElementById('quick-view-content');
+
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }
+
+        function handleEventRegister(e) {
+            e.preventDefault();
+            showToast("Reserva de plaza registrada correctamente.");
+            e.target.reset();
+        }
+
+        function handleNewsletter(e) {
+            e.preventDefault();
+            showToast("Suscripción al boletín confirmada.");
+            e.target.reset();
+        }
+
+        function setupMobileMenu() {
+            const btn = document.getElementById('mobile-menu-toggle');
+            const menu = document.getElementById('mobile-menu');
+            btn.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto bg-ink-dark text-white text-xs font-light px-4 py-3 border border-ink-border shadow-lg flex items-center gap-2 transform transition-all duration-300 translate-y-4 opacity-0`;
+            toast.innerHTML = `
+                <i data-lucide="check" class="w-3.5 h-3.5 stroke-[1.5]"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-4', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
