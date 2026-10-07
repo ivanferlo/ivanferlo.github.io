@@ -1,1 +1,237 @@
-<h1>Hola me llamo Ivan</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ink & Paper | Librería & Papelería Moderna</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              bg: '#FDFBF7',
+              card: '#FFFFFF',
+              text: '#1C1917',
+              muted: '#78716C',
+              terracotta: '#C86D51',
+              sage: '#8A9A86',
+              border: '#E7E5E4'
+            }
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'serif'],
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-brand-bg text-brand-text font-sans antialiased min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 bg-brand-bg/90 backdrop-blur-md border-b border-brand-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+      <a href="#" class="font-serif text-2xl sm:text-3xl font-bold tracking-tight text-brand-text">
+        Ink & Paper
+      </a>
+
+      <!-- Search Bar -->
+      <div class="relative flex-1 max-w-md hidden md:block">
+        <input type="text" id="searchInput" placeholder="Buscar libros, libretas, plumas..." class="w-full bg-white border border-brand-border rounded-full py-2 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-terracotta/50">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3.5 top-3 text-brand-muted"></i>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-4">
+        <button onclick="toggleCart()" class="relative p-2 text-brand-text hover:text-brand-terracotta transition-colors">
+          <i data-lucide="shopping-bag" class="w-6 h-6"></i>
+          <span id="cartCount" class="absolute -top-1 -right-1 bg-brand-terracotta text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-16 sm:py-24 bg-stone-100/60 border-b border-brand-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <h1 class="font-serif text-4xl sm:text-6xl font-normal text-stone-900 tracking-tight leading-tight">
+        El placer de leer, escribir y crear.
+      </h1>
+      <p class="mt-4 text-lg text-brand-muted max-w-2xl mx-auto font-light">
+        Una cuidada selección de literatura contemporánea, instrumentos de escritura y artículos de papelería de diseño.
+      </p>
+    </div>
+  </section>
+
+  <!-- Catalog Section -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-1 w-full">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+      <div>
+        <h2 class="font-serif text-2xl font-semibold">Nuestra Colección</h2>
+        <p class="text-sm text-brand-muted">Explora nuestras novedades destacadas</p>
+      </div>
+      
+      <!-- Filter Tags -->
+      <div class="flex flex-wrap gap-2" id="filterContainer">
+        <button onclick="filterProducts('all')" class="filter-btn active bg-brand-text text-white px-4 py-1.5 rounded-full text-xs font-medium transition-all">Todos</button>
+        <button onclick="filterProducts('libros')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Libros</button>
+        <button onclick="filterProducts('papeleria')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Papelería</button>
+        <button onclick="filterProducts('escritura')" class="filter-btn bg-white border border-brand-border text-brand-muted px-4 py-1.5 rounded-full text-xs font-medium transition-all">Escritura</button>
+      </div>
+    </div>
+
+    <!-- Grid -->
+    <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Cards rendered via JS -->
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-stone-900 text-stone-300 py-12 border-t border-stone-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="font-serif text-xl text-white font-semibold mb-3">Ink & Paper</h3>
+        <p class="text-sm text-stone-400">Librería y papelería conceptual en España. Espacio dedicado a la lectura serena y los artículos de escritorio de alta calidad.</p>
+      </div>
+      <div>
+        <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Ubicación & Horario</h4>
+        <p class="text-sm text-stone-400">Calle Mayor 24, Madrid</p>
+        <p class="text-sm text-stone-400 mt-1">Lunes a Sábado: 10:00 - 20:30</p>
+      </div>
+      <div>
+        <h4 class="text-sm font-semibold text-white mb-3 uppercase tracking-wider">Boletín</h4>
+        <form onsubmit="event.preventDefault(); showToast('¡Suscripción confirmada!');" class="flex gap-2">
+          <input type="email" placeholder="Tu correo electrónico" required class="bg-stone-800 border border-stone-700 text-white text-sm rounded-lg px-3 py-2 focus:outline-none flex-1">
+          <button type="submit" class="bg-brand-terracotta text-white px-4 py-2 rounded-lg text-sm hover:opacity-90">Unirse</button>
+        </form>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Slide-over Cart -->
+  <div id="cartDrawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="toggleCart()"></div>
+    <div class="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div class="w-screen max-w-md bg-white shadow-xl flex flex-col">
+        <div class="p-6 border-b border-brand-border flex items-center justify-between">
+          <h2 class="font-serif text-lg font-semibold">Tu Cesta</h2>
+          <button onclick="toggleCart()" class="p-1 text-brand-muted hover:text-brand-text"><i data-lucide="x"></i></button>
+        </div>
+        <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4">
+          <!-- Cart items via JS -->
+        </div>
+        <div class="p-6 border-t border-brand-border bg-stone-50">
+          <div class="flex justify-between font-semibold text-base mb-4">
+            <span>Total:</span>
+            <span id="cartTotal">0,00 €</span>
+          </div>
+          <button onclick="checkout()" class="w-full bg-brand-text text-white py-3 rounded-lg font-medium hover:bg-stone-800 transition-colors">Tramitar Pedido</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const products = [
+      { id: 1, name: 'Cuaderno Bullet Journal A5', category: 'papeleria', price: 18.90, desc: 'Papel de 120g resistente a la tinta, encuadernación plana.', img: 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&q=80&w=600' },
+      { id: 2, name: 'La Filósofa y el Mar', category: 'libros', price: 22.50, desc: 'Edición especial en tapa dura con acabado mate.', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&q=80&w=600' },
+      { id: 3, name: 'Pluma Estilográfica Brass', category: 'escritura', price: 45.00, desc: 'Cuerpo de latón macizo con plumín de acero inoxidable fino.', img: 'https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?auto=format&fit=crop&q=80&w=600' },
+      { id: 4, name: 'Set de Subrayadores Pastel', category: 'papeleria', price: 9.50, desc: 'Tinta base agua con tonos suavizados para lectura serena.', img: 'https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?auto=format&fit=crop&q=80&w=600' }
+    ];
+
+    let cart = [];
+
+    function renderProducts(items) {
+      const grid = document.getElementById('productGrid');
+      grid.innerHTML = items.map(p => `
+        <div class="bg-white border border-brand-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+          <div class="aspect-square bg-stone-100 overflow-hidden relative">
+            <img src="${p.img}" alt="${p.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+          </div>
+          <div class="p-4">
+            <span class="text-xs uppercase tracking-wider text-brand-muted font-medium">${p.category}</span>
+            <h3 class="font-serif font-semibold text-lg mt-1 text-stone-900">${p.name}</h3>
+            <p class="text-xs text-brand-muted mt-1 line-clamp-2">${p.desc}</p>
+            <div class="mt-4 flex items-center justify-between">
+              <span class="font-semibold text-stone-900">${p.price.toFixed(2).replace('.', ',')} €</span>
+              <button onclick="addToCart(${p.id})" class="bg-stone-100 hover:bg-brand-terracotta hover:text-white p-2 rounded-lg transition-colors">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function addToCart(id) {
+      const prod = products.find(p => p.id === id);
+      cart.push(prod);
+      updateCart();
+      showToast(`${prod.name} añadido a la cesta`);
+    }
+
+    function updateCart() {
+      document.getElementById('cartCount').innerText = cart.length;
+      const itemsContainer = document.getElementById('cartItems');
+      if (cart.length === 0) {
+        itemsContainer.innerHTML = '<p class="text-center text-brand-muted py-8">Tu cesta está vacía</p>';
+      } else {
+        itemsContainer.innerHTML = cart.map((item, idx) => `
+          <div class="flex items-center justify-between border-b border-stone-100 pb-3">
+            <div>
+              <h4 class="font-serif text-sm font-semibold">${item.name}</h4>
+              <p class="text-xs text-brand-muted">${item.price.toFixed(2).replace('.', ',')} €</p>
+            </div>
+            <button onclick="removeFromCart(${idx})" class="text-stone-400 hover:text-red-500"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+          </div>
+        `).join('');
+      }
+      const total = cart.reduce((sum, item) => sum + item.price, 0);
+      document.getElementById('cartTotal').innerText = `${total.toFixed(2).replace('.', ',')} €`;
+      lucide.createIcons();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function toggleCart() {
+      document.getElementById('cartDrawer').classList.toggle('hidden');
+    }
+
+    function filterProducts(cat) {
+      const filtered = cat === 'all' ? products : products.filter(p => p.category === cat);
+      renderProducts(filtered);
+    }
+
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed bottom-4 right-4 bg-stone-900 text-white px-4 py-2 rounded-lg text-sm shadow-lg z-50 transition-opacity';
+      toast.innerText = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function checkout() {
+      if (cart.length === 0) return;
+      alert('¡Gracias por tu pedido en Ink & Paper!');
+      cart = [];
+      updateCart();
+      toggleCart();
+    }
+
+    // Init
+    renderProducts(products);
+    lucide.createIcons();
+  </script>
+</body>
+</html>
